@@ -53,7 +53,7 @@ namespace SuperAdmin.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient webClient = new HttpClient();
-                var result = await webClient.GetAsync("http://localhost:58029/CreateDb/Create?dbCOntext="+tenant.DbContext);
+                var result = await webClient.GetAsync("http://localhost:58862/DB/Create?dbCOntext=" + tenant.DbContext);
                 string textResult = await result.Content.ReadAsStringAsync();
 
                 db.Tenants.Add(tenant);

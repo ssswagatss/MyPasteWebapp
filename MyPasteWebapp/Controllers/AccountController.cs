@@ -10,6 +10,8 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using MyPasteWebapp.Filters;
 using MyPasteWebapp.Models;
+using System.Reflection;
+using WebMatrix.Data;
 
 namespace MyPasteWebapp.Controllers
 {
@@ -30,7 +32,8 @@ namespace MyPasteWebapp.Controllers
 
             List<Tenant> tenants = new List<Tenant>();
             tenants.Add(new Tenant() { Id = 1, Name = "K Force", DbContext = "KforceDB", Email = "swagat.swain@ajatus.co.in" });
-            tenants.Add(new Tenant() { Id = 2, Name = "XYZ", DbContext = "XYZDB", Email = "swagat.swain@ajatus.co.in" });
+            tenants.Add(new Tenant() { Id = 2, Name = "Sudeep Company", DbContext = "SudeepDB", Email = "swagat.swain@ajatus.co.in" });
+
             ViewData["Tenants"] = (from t in tenants
                               select new SelectListItem()
                               {
@@ -50,13 +53,34 @@ namespace MyPasteWebapp.Controllers
         {
             List<Tenant> tenants = new List<Tenant>();
             tenants.Add(new Tenant() { Id = 1, Name = "K Force", DbContext = "KforceDB", Email = "swagat.swain@ajatus.co.in" });
-            tenants.Add(new Tenant() { Id = 2, Name = "XYZ", DbContext = "XYZDB", Email = "swagat.swain@ajatus.co.in" });
+            tenants.Add(new Tenant() { Id = 2, Name = "Sudeep Company", DbContext = "SudeepDB", Email = "swagat.swain@ajatus.co.in" });
 
             string dbCOntext = tenants.Single(x => x.Id == model.TenantId).DbContext;
-            if (!WebSecurity.Initialized)
-            {
-                WebSecurity.InitializeDatabaseConnection("Data Source=.;Initial Catalog=" + dbCOntext + ";Integrated Security=SSPI", "System.Data.SqlClient", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-            }
+
+            //if (!WebSecurity.Initialized)
+            //{
+            //    WebSecurity.InitializeDatabaseConnection("Data Source=.;Initial Catalog=" + dbCOntext + ";Integrated Security=SSPI", "System.Data.SqlClient", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            //}
+
+
+            // Get the connection string that you want, thsi could be from existing Db or Session.
+            string connectionString = string.Format("Data Source=.;Initial Catalog=" + dbCOntext + ";Integrated Security=SSPI");
+            // Set private property of Membership provider.
+            //FieldInfo connectionStringField = GetType().BaseType.GetField("_sqlConnectionString", BindingFlags.Instance | BindingFlags.NonPublic);
+            //connectionStringField.SetValue(this, connectionString);
+
+
+            SimpleMembershipProvider simpleMembership = Membership.Provider as SimpleMembershipProvider;
+            SimpleRoleProvider simpleRoles = Roles.Provider as SimpleRoleProvider;
+
+            //simpleMembership.conn
+            //WebMatrix.WebData DatabaseConnectionInfo connect = new DatabaseConnectionInfo();
+            //connect.ConnectionString = connectionString;
+            //connect.ProviderName = providerName;
+
+
+
+            Database.OpenConnectionString(connectionString, "System.Data.SqlClient");
 
 
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))

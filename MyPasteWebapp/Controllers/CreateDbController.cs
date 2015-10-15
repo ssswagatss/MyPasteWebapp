@@ -22,23 +22,23 @@ namespace MyPasteWebapp.Controllers
             //config.Save();
 
 
-            UsersContext db = new UsersContext(dbCOntext);
-            var books=db.Books.ToList();
+            //UsersContext db = new UsersContext(dbCOntext);
+            //var books=db.Books.ToList();
 
-            WebSecurity.InitializeDatabaseConnection("Data Source=.;Initial Catalog=" + dbCOntext + ";Integrated Security=SSPI", "System.Data.SqlClient", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            //WebSecurity.InitializeDatabaseConnection("Data Source=.;Initial Catalog=" + dbCOntext + ";Integrated Security=SSPI", "System.Data.SqlClient", "UserProfile", "UserId", "UserName", autoCreateTables: true);
 
-            var roles = System.Web.Security.Roles.Provider;
-            roles.CreateRole("admin");
-            roles.CreateRole("consultants");
+            //var roles = System.Web.Security.Roles.Provider;
+            //roles.CreateRole("admin");
+            //roles.CreateRole("consultants");
 
-            string userName = "tcadmin";
-            string password = "Sync#150";
+            //string userName = "tcadmin";
+            //string password = "Sync#150";
 
-            if (!WebSecurity.IsConfirmed(userName))
-                WebSecurity.CreateUserAndAccount(userName, password);
+            //if (!WebSecurity.IsConfirmed(userName))
+            //    WebSecurity.CreateUserAndAccount(userName, password);
 
-            if (!roles.IsUserInRole(userName, "admin"))
-                roles.AddUsersToRoles(new string[] { userName }, new string[] { "admin" });
+            //if (!roles.IsUserInRole(userName, "admin"))
+            //    roles.AddUsersToRoles(new string[] { userName }, new string[] { "admin" });
             return dbCOntext;
         }
 
